@@ -30,7 +30,13 @@ public class SocketDataManager : MonoBehaviour {
 
     void OnGesture(GestureData gesture)
     {
-
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        if (GameObject.Find("DepthCameraManager").GetComponent<GesturalManager>().GetHandSide(gesture) == BodySideType.BODY_SIDE_LEFT)
+            data["hand"] = "left";
+        else if (GameObject.Find("DepthCameraManager").GetComponent<GesturalManager>().GetHandSide(gesture) == BodySideType.BODY_SIDE_RIGHT)
+            data["hand"] = "right";
+        data["gesture"] = gesture.name;
+        socket.Emit("updateCurrentGesture", new JSONObject(data));
     }
 
     void OnLeftHandChange(Vector3 handPosition)
