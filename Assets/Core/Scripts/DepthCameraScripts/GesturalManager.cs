@@ -4,8 +4,9 @@ using UnityEngine;
 using Intel.RealSense;
 using Intel.RealSense.Hand;
 
-public class GesturalManager : MonoBehaviour {
+public class GesturalManager : Publisher {
 
+    public bool isEnableAllGesture;
     public string[] gestureActions;
     public GameObject L, R;
 
@@ -18,18 +19,27 @@ public class GesturalManager : MonoBehaviour {
         UpdateHandGesture();
     }
 
+    // Enable Gesture
     public void EnableGestures()
     {
         handManager = GetComponent<HandManager>();
-        foreach (string gesture in gestureActions)
+        if (isEnableAllGesture)
         {
-            Debug.Log(TAG + gesture+" Enabled!");
-            handManager.handConfiguration.EnableGesture(gesture, true);
+            Debug.Log(TAG + "All Gesture Enabled!");
+            handManager.handConfiguration.EnableAllGestures();
+        }else
+        {
+            foreach (string gesture in gestureActions)
+            {
+                Debug.Log(TAG + gesture + " Enabled!");
+                handManager.handConfiguration.EnableGesture(gesture, true);
+            }
         }
         handManager.handConfiguration.ApplyChanges();
         GetComponent<DepthCameraManger>().StartDevice();
     }
 
+    // Update Gesture
     public void UpdateHandGesture()
     {
         if (GetComponent<DepthCameraManger>().isStart)
@@ -37,33 +47,40 @@ public class GesturalManager : MonoBehaviour {
                 if (handManager.handData.FiredGestureData != null)
                     foreach (GestureData gesture in handManager.handData.FiredGestureData)
                     {
-                        IHand hand;
-                        if (GetComponent<HandManager>().handData.QueryHandDataById(gesture.handId,out hand) == Status.STATUS_NO_ERROR)
+                        string camelCaseGestureName = CreateCamelCase(gesture.name);
+                        if (GetHandSide(gesture)==BodySideType.BODY_SIDE_LEFT)
                         {
-                            string camelCaseGestureName = CreateCamelCase(gesture.name);
-                            if (hand.BodySide == BodySideType.BODY_SIDE_LEFT)
-                            {
-                                this.SendMessage("OnLeftHand" + camelCaseGestureName, SendMessageOptions.DontRequireReceiver);
-                                L.GetComponent<TextMesh>().text = "L : " + camelCaseGestureName;
-                                this.SendMessage("OnGesture", gesture, SendMessageOptions.DontRequireReceiver);
-                            }
-                            else if (hand.BodySide == BodySideType.BODY_SIDE_RIGHT)
-                            {
-                                this.SendMessage("OnRightHand" + camelCaseGestureName, SendMessageOptions.DontRequireReceiver);
-                                R.GetComponent<TextMesh>().text = "R : " + camelCaseGestureName;
-                                this.SendMessage("OnGesture", gesture, SendMessageOptions.DontRequireReceiver);
-                            }
-                            this.SendMessage("On" + camelCaseGestureName, SendMessageOptions.DontRequireReceiver);
+                            Boardcast("OnLeftHand" + camelCaseGestureName);
+                            L.GetComponent<TextMesh>().text = "L : " + camelCaseGestureName;
                         }
+                        else if (GetHandSide(gesture) == BodySideType.BODY_SIDE_RIGHT)
+                        {
+                            Boardcast("OnRightHand" + camelCaseGestureName);
+                            R.GetComponent<TextMesh>().text = "R : " + camelCaseGestureName;
+                        }
+                        Boardcast("On" + camelCaseGestureName);
+                        Boardcast("OnGesture", gesture);
                     }
     }
 
+    // Create Camel Case String
     string CreateCamelCase(string normalString)
     {
         string[] arrStr = normalString.Split('_');
         for (int i = 0;i<arrStr.Length;i++)
             arrStr[i] = (arrStr[i][0] + "").ToUpper() + arrStr[i].Substring(1);
         return string.Join("", arrStr);
+    }
+
+    // Get Hand Side from gesture
+    public BodySideType GetHandSide(GestureData gesture)
+    {
+        IHand hand;
+        if (GetComponent<HandManager>().handData.QueryHandDataById(gesture.handId, out hand) == Status.STATUS_NO_ERROR)
+        {
+            return hand.BodySide;
+        }
+        return BodySideType.BODY_SIDE_UNKNOWN;
     }
 
     //ExampleMethod

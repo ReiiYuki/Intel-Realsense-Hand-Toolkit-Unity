@@ -4,18 +4,15 @@ using UnityEngine;
 using Intel.RealSense.Hand;
 using Intel.RealSense;
 
-public class HandPositionManager : MonoBehaviour {
+public class HandPositionManager : Publisher {
     HandManager handManager;
-    public GameObject L,R;
-	// Use this for initialization
-	void Start () {
-	}
-	
+
 	// Update is called once per frame
 	void Update () {
         UpdateHandPosition();
 	}
 
+    // Update and boardcast hand position
     void UpdateHandPosition()
     {
         handManager = GetComponent<HandManager>();
@@ -28,14 +25,9 @@ public class HandPositionManager : MonoBehaviour {
                     if (handManager.handData.QueryHandData(AccessOrderType.ACCESS_ORDER_BY_TIME,i,out hand) == Status.STATUS_NO_ERROR)
                     {
                         if (hand.BodySide == BodySideType.BODY_SIDE_LEFT)
-                        {
-                            Debug.Log("Left : " + hand.MassCenterWorld.x*10 + " " + hand.MassCenterWorld.y * 10 + " " + hand.MassCenterWorld.z * 10);
-                            L.transform.position = Camera.main.transform.position+new Vector3(hand.MassCenterWorld.x * 100, hand.MassCenterWorld.y * 100, hand.MassCenterWorld.z * 100)+Camera.main.transform.forward;
-                        }
-                        else if (hand.BodySide == BodySideType.BODY_SIDE_RIGHT){
-                            Debug.Log("Right : " + hand.MassCenterWorld.x * 10 + " " + hand.MassCenterWorld.y * 10 + " " + hand.MassCenterWorld.z * 10);
-                            R.transform.position = Camera.main.transform.position+new Vector3(hand.MassCenterWorld.x * 100, hand.MassCenterWorld.y * 100, hand.MassCenterWorld.z * 100) + Camera.main.transform.forward;
-                        }
+                            Boardcast("OnLeftHandChange", new Vector3(hand.MassCenterWorld.x, hand.MassCenterWorld.y, hand.MassCenterWorld.z));
+                        else if (hand.BodySide == BodySideType.BODY_SIDE_RIGHT)
+                            Boardcast("OnRightHandChange", new Vector3(hand.MassCenterWorld.x, hand.MassCenterWorld.y, hand.MassCenterWorld.z));
                     }
                 }
             }

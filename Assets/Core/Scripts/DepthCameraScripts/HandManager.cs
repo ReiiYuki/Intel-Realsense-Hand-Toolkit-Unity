@@ -4,6 +4,8 @@ using UnityEngine;
 using Intel.RealSense;
 using Intel.RealSense.Hand;
 
+#pragma warning disable CS0618 // Type or member is obsolete
+
 public class HandManager : MonoBehaviour {
 
     // Hand Manger Component
@@ -15,16 +17,19 @@ public class HandManager : MonoBehaviour {
     // Tag for Log
     string TAG = "Hand Manager : ";
 
+    // Call when init
+    void Awake()
+    {
+        depthCameraManager = GetComponent<DepthCameraManger>();
+    }
+
     //Call every frame
     void Update()
     {
-        if (depthCameraManager.isStart && depthCameraManager.senseManager.AcquireFrame(true).IsSuccessful())
-        {
-            handData.Update();
-            depthCameraManager.senseManager.ReleaseFrame();
-        }
+        UpdateFrame();
     }
 
+    // Initialize HandManager
     public void InitializeHandManger()
     {
         SetupHandModule();
@@ -33,10 +38,9 @@ public class HandManager : MonoBehaviour {
     // Activate Hand Module
     void SetupHandModule()
     {
-        depthCameraManager = GetComponent<DepthCameraManger>();
         handModule = HandModule.Activate(depthCameraManager.senseManager);
         if (handModule == null)
-            Debug.Log(TAG + "Failed Loading Hand Module");
+            throw new System.Exception("Failed Loading Hand Module");
         else
         {
             Debug.Log(TAG + "Hand Module is loaded successful");
@@ -49,7 +53,7 @@ public class HandManager : MonoBehaviour {
     {
         handConfiguration = handModule.CreateActiveConfiguration();
         if (handConfiguration == null)
-            Debug.Log(TAG + "Failed Creating Hand Configuration");
+            throw new System.Exception("Failed Creating Hand Configuration");
         else
         {
             Debug.Log(TAG + "Successful Creating Hand Configuration");
@@ -62,7 +66,7 @@ public class HandManager : MonoBehaviour {
     {
         handData = handModule.CreateOutput();
         if (handData == null)
-            Debug.Log(TAG + "Failed to create output");
+            throw new System.Exception("Failed to create hand output");
         else
         {
             Debug.Log(TAG + "Successful to create output");
@@ -78,4 +82,20 @@ public class HandManager : MonoBehaviour {
         Debug.Log(TAG + "Setup Hand Configuration Property");
         GetComponent<GesturalManager>().EnableGestures() ;
      }
+
+    // Update Data In Each Frame
+    public void UpdateFrame()
+    {
+        if (depthCameraManager.isStart)
+        {
+            if (depthCameraManager.senseManager.AcquireFrame(true).IsSuccessful())
+            {
+                handData.Update();
+                depthCameraManager.senseManager.ReleaseFrame();
+            }
+            else
+                throw new System.Exception("Failed Updating Frame!");
+        }
+    }
 }
+#pragma warning restore CS0618 // Type or member is obsolete
