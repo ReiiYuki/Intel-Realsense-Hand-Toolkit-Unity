@@ -8,7 +8,6 @@ public class GesturalManager : Publisher {
 
     public bool isEnableAllGesture;
     public string[] gestureActions;
-    public GameObject L, R;
 
     HandManager handManager;
 
@@ -49,15 +48,9 @@ public class GesturalManager : Publisher {
                     {
                         string camelCaseGestureName = CreateCamelCase(gesture.name);
                         if (GetHandSide(gesture)==BodySideType.BODY_SIDE_LEFT)
-                        {
                             Boardcast("OnLeftHand" + camelCaseGestureName);
-                            L.GetComponent<TextMesh>().text = "L : " + camelCaseGestureName;
-                        }
                         else if (GetHandSide(gesture) == BodySideType.BODY_SIDE_RIGHT)
-                        {
                             Boardcast("OnRightHand" + camelCaseGestureName);
-                            R.GetComponent<TextMesh>().text = "R : " + camelCaseGestureName;
-                        }
                         Boardcast("On" + camelCaseGestureName);
                         Boardcast("OnGesture", gesture);
                     }
@@ -83,19 +76,4 @@ public class GesturalManager : Publisher {
         return BodySideType.BODY_SIDE_UNKNOWN;
     }
 
-    //ExampleMethod
-    void OnSpreadfingers()
-    {
-        Debug.Log("Yes");
-    }
-
-    void OnLeftHandSpreadfingers()
-    {
-        Debug.Log("LYes");
-    }
-
-    void OnRightHandSpreadfingers()
-    {
-        Debug.Log("RYes");
-    }
 }
