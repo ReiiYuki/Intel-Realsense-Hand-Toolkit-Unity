@@ -11,8 +11,10 @@ public class SocketDataManager : MonoBehaviour {
 	void Awake () {
         
         socket = GetComponentInChildren<SocketIOComponent>();
-        GameObject.Find("DepthCameraManager").GetComponent<HandPositionManager>().AddSubscriber(gameObject);
+        
         StartCoroutine(ConnectToServer());
+
+        socket.On("identifySuccess", OnIdentifySuccess);
 	}
 	
     // Connect To Server
@@ -22,6 +24,7 @@ public class SocketDataManager : MonoBehaviour {
         Dictionary<string, string> data = new Dictionary<string, string>();
         data["type"] = "IR";
         socket.Emit("identify", new JSONObject(data));
+        Subscribe();
         yield break;
     }
 
@@ -46,5 +49,16 @@ public class SocketDataManager : MonoBehaviour {
         data["y"] = handPosition.y.ToString();
         data["z"] = handPosition.z.ToString();
         socket.Emit("updateRightHandPosition", new JSONObject(data));
+    }
+
+    void Subscribe()
+    {
+        GameObject.Find("DepthCameraManager").GetComponent<HandPositionManager>().AddSubscriber(gameObject);
+        GameObject.Find("DepthCameraManager").GetComponent<GesturalManager>().AddSubscriber(gameObject);
+    }
+
+    void OnIdentifySuccess(SocketIOEvent evt)
+    {
+        Subscribe();
     }
 }
