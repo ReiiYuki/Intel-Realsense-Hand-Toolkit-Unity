@@ -38,6 +38,7 @@ public class HandManager : MonoBehaviour {
     // Activate Hand Module
     void SetupHandModule()
     {
+        depthCameraManager = GetComponent<DepthCameraManger>();
         handModule = HandModule.Activate(depthCameraManager.senseManager);
         if (handModule == null)
             throw new System.Exception("Failed Loading Hand Module");

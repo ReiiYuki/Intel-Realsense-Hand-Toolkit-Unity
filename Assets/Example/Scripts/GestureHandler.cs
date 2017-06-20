@@ -7,7 +7,7 @@ public class GestureHandler : MonoBehaviour {
     public GameObject leftCursor, rightCursor;
 
     //Call when inti
-    void Awake()
+    void Start()
     {
         GameObject.Find("DepthCameraManager").GetComponent<GesturalManager>().AddSubscriber(gameObject);
     }
