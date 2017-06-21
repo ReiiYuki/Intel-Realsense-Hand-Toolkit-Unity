@@ -7,6 +7,7 @@ using System.Text;
 
 public class SocketServer : MonoBehaviour {
     public string IP;
+    public int PORT;
     Socket socket;
     IPEndPoint ipEndPoint;
 	// Use this for initialization
@@ -21,7 +22,7 @@ public class SocketServer : MonoBehaviour {
 
     void StartSocket() {
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        ipEndPoint = new IPEndPoint(IPAddress.Parse(IP), 11000);
+        ipEndPoint = new IPEndPoint(IPAddress.Parse(IP), PORT);
         Debug.Log("Initialize Socket Server");
         Debug.Log("Send Target " + ipEndPoint.Address + ":" + ipEndPoint.Port);
     }
