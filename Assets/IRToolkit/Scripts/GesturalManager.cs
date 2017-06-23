@@ -44,16 +44,22 @@ public class GesturalManager : Publisher {
         if (GetComponent<DepthCameraManger>().isStart)
             if (handManager.handData != null)
                 if (handManager.handData.FiredGestureData != null)
+                {
                     foreach (GestureData gesture in handManager.handData.FiredGestureData)
                     {
                         string camelCaseGestureName = CreateCamelCase(gesture.name);
-                        if (GetHandSide(gesture)==BodySideType.BODY_SIDE_LEFT)
+                        if (GetHandSide(gesture) == BodySideType.BODY_SIDE_LEFT)
+                        {
                             Boardcast("OnLeftHand" + camelCaseGestureName);
+                        }
                         else if (GetHandSide(gesture) == BodySideType.BODY_SIDE_RIGHT)
+                        {
                             Boardcast("OnRightHand" + camelCaseGestureName);
+                        }
                         Boardcast("On" + camelCaseGestureName);
                         Boardcast("OnGesture", gesture);
                     }
+                }
     }
 
     // Create Camel Case String
