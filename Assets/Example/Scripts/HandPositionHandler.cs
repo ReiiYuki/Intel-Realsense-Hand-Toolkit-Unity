@@ -2,43 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandPositionHandler : MonoBehaviour {
-
-    public GameObject leftCursor, rightCursor;
-
-    void Start()
+namespace Example
+{
+    public class HandPositionHandler : MonoBehaviour
     {
-        GameObject.Find("DepthCameraManager").GetComponent<HandPositionManager>().AddSubscriber(gameObject);    
-    }
 
-    void OnLeftHandChange(Vector3 handPosition)
-    {
-        leftCursor.transform.position = Camera.main.transform.position + new Vector3(handPosition.x * 100, handPosition.y * 100, handPosition.z * 100) + Camera.main.transform.forward;
-    }
+        public GameObject leftCursor, rightCursor;
 
-    void OnRightHandChange(Vector3 handPosition)
-    {
-        rightCursor.transform.position = Camera.main.transform.position + new Vector3(handPosition.x * 100, handPosition.y * 100, handPosition.z * 100) + Camera.main.transform.forward;
-    }
+        void Start()
+        {
+            GameObject.Find("DepthCameraManager").GetComponent<HandPositionManager>().AddSubscriber(gameObject);
+        }
 
-    void OnLeftHandAppear()
-    {
-        leftCursor.SetActive(true);
-    }
+        void OnLeftHandChange(Vector3 handPosition)
+        {
+            leftCursor.transform.position = Camera.main.transform.position + new Vector3(handPosition.x * 100, handPosition.y * 100, handPosition.z * 100) + Camera.main.transform.forward;
+        }
 
-    void OnLeftHandDisappear()
-    {
-        leftCursor.SetActive(false);
-    }
+        void OnRightHandChange(Vector3 handPosition)
+        {
+            rightCursor.transform.position = Camera.main.transform.position + new Vector3(handPosition.x * 100, handPosition.y * 100, handPosition.z * 100) + Camera.main.transform.forward;
+        }
 
-    void OnRightHandAppear()
-    {
-        rightCursor.SetActive(true);
-    }
+        void OnLeftHandAppear()
+        {
+            leftCursor.SetActive(true);
+        }
 
-    void OnRightHandDisappear()
-    {
-        rightCursor.SetActive(false);
+        void OnLeftHandDisappear()
+        {
+            leftCursor.SetActive(false);
+        }
+
+        void OnRightHandAppear()
+        {
+            rightCursor.SetActive(true);
+        }
+
+        void OnRightHandDisappear()
+        {
+            rightCursor.SetActive(false);
+        }
+
     }
 
 }
