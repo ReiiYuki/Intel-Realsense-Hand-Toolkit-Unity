@@ -14,9 +14,10 @@ public class HandPositionManager : Publisher {
 
     HandManager handManager;
     State leftHandState, rightHandState;
+    public int sign = 1;
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
         UpdateHandPosition();
 	}
 
@@ -36,12 +37,12 @@ public class HandPositionManager : Publisher {
                     {
                         if (hand.BodySide == BodySideType.BODY_SIDE_LEFT)
                         {
-                            Boardcast("OnLeftHandChange", new Vector3(hand.MassCenterWorld.x, hand.MassCenterWorld.y, hand.MassCenterWorld.z));
+                            Boardcast("OnLeftHandChange", new Vector3(hand.MassCenterWorld.x* sign, hand.MassCenterWorld.y , hand.MassCenterWorld.z ));
                             isLeftAppear = State.Appear;
                         }
                         else if (hand.BodySide == BodySideType.BODY_SIDE_RIGHT)
                         {
-                            Boardcast("OnRightHandChange", new Vector3(hand.MassCenterWorld.x, hand.MassCenterWorld.y, hand.MassCenterWorld.z));
+                            Boardcast("OnRightHandChange", new Vector3(hand.MassCenterWorld.x * sign, hand.MassCenterWorld.y , hand.MassCenterWorld.z ));
                             isRightAppear = State.Appear;
                         }
                     }
