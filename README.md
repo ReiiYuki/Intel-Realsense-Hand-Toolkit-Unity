@@ -4,6 +4,10 @@
 
 Intel Realsense Hand Toolkit for Unity is toolkit for developing on hand tracking feature in Unity application with Intel Realsense camera easier.
 
+## Latest Unity3D Package
+
+[Download Unity Package](https://github.com/ReiiYuki/Intel-Realsense-Hand-Toolkit-Unity/releases/download/1.1.0/Intel-Realsense-Hand-Toolkit-v1.1.0.unitypackage)
+
 ## Requirement
 
 ```
