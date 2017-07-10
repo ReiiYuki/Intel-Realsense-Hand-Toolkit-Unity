@@ -66,7 +66,7 @@ public class HandPositionManager : Publisher {
                 Boardcast("OnRightHandAppear");
             else
                 Boardcast("OnRightHandDisappear");
-            rightHandState = isLeftHandAppear;
+            rightHandState = isRightHandAppear;
         }
     }
 }

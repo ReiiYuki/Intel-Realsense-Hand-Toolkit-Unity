@@ -407,6 +407,7 @@ MonoBehaviour:
   - v_sign
   - fist
   - thumb_up
+  - swipe_up
 --- !u!114 &1978953160
 MonoBehaviour:
   m_ObjectHideFlags: 0
