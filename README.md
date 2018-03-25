@@ -8,6 +8,10 @@ Intel Realsense Hand Toolkit for Unity is toolkit for developing on hand trackin
 
 [Download Unity Package](https://github.com/ReiiYuki/Intel-Realsense-Hand-Toolkit-Unity/releases/download/1.1.0/Intel-Realsense-Hand-Toolkit-v1.1.0.unitypackage)
 
+## Intel Realsense SDK
+
+[Download Intel Realsense SDK](https://software.intel.com/en-us/realsense-sdk-windows-eol)
+
 ## Requirement
 
 ```
