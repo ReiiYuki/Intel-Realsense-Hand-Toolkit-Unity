@@ -18,8 +18,10 @@ Intel Realsense Hand Toolkit for Unity is toolkit for developing on hand trackin
 Unity3D
 Intel Realsense SDK
 Intel Realsense Full Hand Tracking and Gesture Recognition SDK
-F200/SR300/R200 Camera Driver
+F200/SR300 Camera Driver
 ```
+
+Noted: `R200` is not supported, because `Intel Realsense Full Hand Tracking and Gesture Recognition SDK` is not available in `R2`.
 
 ## Initialization
 
