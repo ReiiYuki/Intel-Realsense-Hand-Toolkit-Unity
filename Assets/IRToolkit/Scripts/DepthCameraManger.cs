@@ -28,7 +28,7 @@ public class DepthCameraManger : MonoBehaviour {
         Session session = Session.CreateInstance()
         if (session == null)
             throw new System.Exception("Session Initialize Failure!");
-        senseManager = sesssion.CreateSenseManager();
+        senseManager = session.CreateSenseManager();
         if (senseManager == null)
             throw new System.Exception("Sense Manager Initialize Failure!");
         else
